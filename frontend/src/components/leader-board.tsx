@@ -14,7 +14,7 @@ export function LeaderBoard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/leaderboard', {
+        const response = await fetch('http://vmi1968527.contaboserver.net/api/leaderboard', {
           credentials: 'include'
         })
         const data = await response.json()
