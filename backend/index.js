@@ -39,7 +39,15 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/commit-tr
 });
 console.log('connected to mongodb');
 
-
+// Health check route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    message: 'Server is running'
+  });
+});
 
 // Add these helper functions at the top of your file
 async function createJWT() {
