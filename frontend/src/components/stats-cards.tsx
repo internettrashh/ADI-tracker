@@ -16,7 +16,7 @@ export function StatsCards() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://vmi1968527.contaboserver.net/api/user/stats')
+        const response = await fetch('https://vmi1968527.contaboserver.net/api/user/stats')
         
         if (!response.ok) {
           throw new Error('Failed to fetch stats')

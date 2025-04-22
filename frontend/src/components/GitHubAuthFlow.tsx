@@ -22,7 +22,7 @@ export function GitHubAuthFlow({ onComplete }: { onComplete?: () => void }) {
     
     if (needsInstallation === 'true') {
       // Open GitHub App installation page in a new tab
-      const installUrl = `https://github.com/apps/adidemooo0/installations/new`;
+      const installUrl = `https://github.com/apps/aditracker/installations/new`;
       window.open(installUrl, '_blank');
       // After opening installation page, redirect to dashboard
       window.location.href = '/dashboard';
@@ -34,14 +34,14 @@ export function GitHubAuthFlow({ onComplete }: { onComplete?: () => void }) {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:3000/auth/status', {
+      const response = await fetch('https://vmi1968527.contaboserver.net/auth/status', {
         credentials: 'include'
       });
       const data = await response.json();
       
       if (data.authenticated) {
         // If authenticated, check GitHub App installation
-        const installationResponse = await fetch('http://localhost:3000/auth/check-installation', {
+        const installationResponse = await fetch('https://vmi1968527.contaboserver.net/auth/check-installation', {
           credentials: 'include'
         });
         const installationData = await installationResponse.json();
@@ -69,11 +69,11 @@ export function GitHubAuthFlow({ onComplete }: { onComplete?: () => void }) {
   };
 
   const handleGitHubAuth = () => {
-    window.location.href = 'http://localhost:3000/auth/github';
+    window.location.href = 'https://vmi1968527.contaboserver.net/auth/github';
   };
 
   const handleInstallApp = () => {
-    window.location.href = 'http://localhost:3000/auth/github/install';
+    window.location.href = 'https://vmi1968527.contaboserver.net/auth/github/install';
   };
 
   if (isLoading) {

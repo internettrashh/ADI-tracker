@@ -9,7 +9,7 @@ export default function InstallAppPage() {
         // Check if we have GitHub user info in session
         const checkAndRedirect = async () => {
             try {
-                const response = await fetch('http://vmi1968527.contaboserver.net/auth/status', {
+                const response = await fetch('https://vmi1968527.contaboserver.net/auth/status', {
                     credentials: 'include'
                 });
                 const data = await response.json();
@@ -21,7 +21,7 @@ export default function InstallAppPage() {
                 }
 
                 // Redirect to GitHub App installation
-                window.location.href = 'http://vmi1968527.contaboserver.net/auth/install-app';
+                window.location.href = 'https://vmi1968527.contaboserver.net/auth/install-app';
             } catch (error) {
                 console.error('Error:', error);
                 window.location.href = '/';

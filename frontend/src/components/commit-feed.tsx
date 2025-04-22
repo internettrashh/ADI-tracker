@@ -18,7 +18,7 @@ export function CommitFeed() {
   useEffect(() => {
     const fetchCommits = async () => {
       try {
-        const response = await fetch('http://vmi1968527.contaboserver.net/api/recent-commits', {
+        const response = await fetch('https://vmi1968527.contaboserver.net/api/recent-commits', {
           credentials: 'include'
         })
         const data = await response.json()
