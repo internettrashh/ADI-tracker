@@ -17,9 +17,9 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+    origin: '*',  // Allow all origins
+    credentials: true
+  }));
 app.use(bodyParser.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || crypto.randomBytes(64).toString('hex'),
