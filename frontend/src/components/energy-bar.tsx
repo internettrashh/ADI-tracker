@@ -31,73 +31,53 @@ export function EnergyBar() {
     }
 
     fetchCommitStats()
-    // Update to 5 seconds
+    // Update every 5 seconds
     const interval = setInterval(fetchCommitStats, 5000)
     return () => clearInterval(interval)
   }, [])
 
   // Calculate percentage towards goal
-  const percentage = Math.min(100, (stats.totalCommits / stats.goal) * 100)
-  
-  // Determine color based on progress
-  const getProgressColor = () => {
-    if (percentage < 30) return "bg-red-500"
-    if (percentage < 70) return "bg-yellow-500"
-    return "bg-green-500"
-  }
+  const percentageOfGoal = Math.min(100, (stats.totalCommits / stats.goal) * 100)
 
-  // Calculate remaining commits
-  const remainingCommits = Math.max(0, stats.goal - stats.totalCommits)
+  // Calculate the rotation for the needle (from -120 to 120 degrees)
+  const rotation = -120 + (percentageOfGoal / 100) * 240
 
   if (isLoading) {
     return (
-      <div className="flex h-full flex-col justify-between gap-4">
-        <div className="text-sm text-muted-foreground">Loading...</div>
+      <div className="relative flex aspect-video flex-col items-center justify-center opacity-50">
+        <div className="text-primary/70">Loading commit data...</div>
       </div>
     )
   }
 
   return (
-    <div className="flex h-full flex-col justify-between gap-4">
-      <div className="flex items-center justify-between">
-        <div className="text-2xl font-bold">{stats.totalCommits}</div>
-        <div className="text-sm text-muted-foreground">
-          Goal: {stats.goal}
+    <div className="relative flex aspect-video flex-col items-center justify-center p-8">
+      {/* Header */}
+
+      {/* Right Side - % of Goal */}
+      <div className="absolute right-12 top-0 text-center">
+        <div className="text-6xl font-bold tracking-wider">
+          {Math.round(percentageOfGoal)}%
+        </div>
+        <div className="text-sm text-primary/60 tracking-wider mb-1">GOAL REACHED</div>
+      </div>
+
+      {/* Center - Total Commits */}
+      <div className="relative">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10">
+          <div className="text-[8rem] font-bold tracking-wider">
+            {stats.totalCommits}
+          </div>
+          <div className="text-sm text-primary/60 tracking-[0.2em] mt-4">TOTAL COMMITS</div>
         </div>
       </div>
 
-      <div className="relative h-64 w-full bg-muted rounded-lg overflow-hidden">
-        <div
-          className={`absolute bottom-0 w-full transition-all duration-1000 ${getProgressColor()}`}
-          style={{ height: `${percentage}%` }}
-        ></div>
-
-        {/* Level markers */}
-        <div className="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none">
-          <div className="border-t border-dashed border-foreground/20 pt-1">
-            <span className="text-xs text-foreground/50">300</span>
-          </div>
-          <div className="border-t border-dashed border-foreground/20 pt-1">
-            <span className="text-xs text-foreground/50">225</span>
-          </div>
-          <div className="border-t border-dashed border-foreground/20 pt-1">
-            <span className="text-xs text-foreground/50">150</span>
-          </div>
-          <div className="border-t border-dashed border-foreground/20 pt-1">
-            <span className="text-xs text-foreground/50">75</span>
-          </div>
-          <div className="border-t border-dashed border-foreground/20 pt-1">
-            <span className="text-xs text-foreground/50">0</span>
-          </div>
+      {/* Bottom Left - Goal */}
+      <div className="absolute bottom-12 left-12">
+        <div className="text-sm text-primary/60 tracking-wider mb-1">GOAL</div>
+        <div className="text-6xl font-bold tracking-wider">
+          {stats.goal}
         </div>
-      </div>
-
-      <div className="text-sm text-muted-foreground">
-        {remainingCommits === 0 ? (
-          <span className="text-green-500 font-medium">Goal achieved! 🎉</span>
-        ) : (
-          `${remainingCommits} commits to reach goal`
-        )}
       </div>
     </div>
   )

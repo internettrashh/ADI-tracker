@@ -14,11 +14,10 @@ export function LeaderBoard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch('https://vmi1968527.contaboserver.net/api/leaderboard', {
-         
-        })
+        const response = await fetch('https://vmi1968527.contaboserver.net/api/leaderboard')
         const data = await response.json()
-        setLeaders(data.slice(0, 7)) // Only take top 7
+        // Show more hackers with compact layout
+        setLeaders(data.slice(0, 8))
       } catch (error) {
         console.error('Error fetching leaderboard:', error)
         setLeaders([])
@@ -35,36 +34,45 @@ export function LeaderBoard() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-muted-foreground">Loading leaderboard...</div>
+      <div className="space-y-2">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex items-center justify-between border-b border-primary/20 pb-2 last:border-0 animate-pulse">
+            <div className="flex items-center gap-2">
+              <div className="font-mono text-sm font-bold text-primary/20">#{i}</div>
+              <div className="h-6 w-6 rounded-full bg-primary/20" />
+              <div className="h-3 w-20 bg-primary/20 rounded" />
+            </div>
+            <div className="h-3 w-12 bg-primary/20 rounded" />
+          </div>
+        ))}
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {leaders.map((user, index) => (
         <div
           key={user.username}
-          className="flex items-center justify-between rounded-lg border p-4"
+          className="flex items-center justify-between border-b border-primary/20 pb-2 last:border-0"
         >
-          <div className="flex items-center gap-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted font-semibold">
-              {index + 1}
+          <div className="flex items-center gap-2">
+            <div className="font-mono text-sm font-bold text-primary/70 w-4">
+              #{index + 1}
             </div>
-            <div className="flex items-center gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user.avatarUrl} />
-                <AvatarFallback>
-                  {user.username.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="font-medium">{user.username}</div>
+            <Avatar className="h-6 w-6 border border-primary/30">
+              <AvatarImage src={user.avatarUrl} />
+              <AvatarFallback className="text-xs">{user.username[0]}</AvatarFallback>
+            </Avatar>
+            <div className="font-mono text-xs tracking-wider text-primary truncate">
+              {user.username}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">{user.totalCommits}</span>
-            <span className="text-sm text-muted-foreground">commits</span>
+          <div className="flex items-center gap-1">
+            <div className="font-mono text-xs text-primary/70">COMMITS</div>
+            <div className="font-mono text-sm font-bold tracking-wider text-primary retro-glow min-w-[2ch] text-right">
+              {user.totalCommits}
+            </div>
           </div>
         </div>
       ))}

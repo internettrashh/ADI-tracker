@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { GitCommit, GitFork, GitBranch } from "lucide-react"
+import { GitCommit, GitFork, GitBranch, Users } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface StatsData {
@@ -17,14 +17,14 @@ export function StatsCards() {
     const fetchStats = async () => {
       try {
         const response = await fetch('https://vmi1968527.contaboserver.net/api/user/stats')
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch stats')
         }
 
         const data = await response.json()
         console.log('Fetched stats:', data) // Debug log
-        
+
         setStats({
           totalCommits: data.totalCommits,
           totalProjects: data.totalProjects,
@@ -68,34 +68,36 @@ export function StatsCards() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Hackers</CardTitle>
-          <GitFork className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats?.totalHackers}</div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Commits</CardTitle>
-          <GitCommit className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats?.totalCommits}</div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-          <GitBranch className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats?.totalProjects}</div>
-        </CardContent>
-      </Card>
+    <div className="grid gap-4 text-sm">
+      <div className="flex items-center justify-between border-b border-primary/20 pb-3">
+        <div className="flex items-center gap-2">
+          <Users className="h-4 w-4 text-primary" />
+          <span className="text-xs uppercase text-primary/70">Active Hackers</span>
+        </div>
+        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
+          {stats?.totalHackers}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-b border-primary/20 pb-3">
+        <div className="flex items-center gap-2">
+          <GitCommit className="h-4 w-4 text-primary" />
+          <span className="text-xs uppercase text-primary/70">Total Commits</span>
+        </div>
+        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
+          {stats?.totalCommits}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <GitFork className="h-4 w-4 text-primary" />
+          <span className="text-xs uppercase text-primary/70">Active Projects</span>
+        </div>
+        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
+          {stats?.totalProjects}
+        </div>
+      </div>
     </div>
   )
 }

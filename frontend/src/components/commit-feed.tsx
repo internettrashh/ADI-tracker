@@ -19,10 +19,11 @@ export function CommitFeed() {
     const fetchCommits = async () => {
       try {
         const response = await fetch('https://vmi1968527.contaboserver.net/api/recent-commits', {
-          
+
         })
         const data = await response.json()
-        setCommits(data)
+        // Show more commits since we have a more compact layout
+        setCommits(data.slice(0, 8))
       } catch (error) {
         console.error('Error fetching commits:', error)
         setCommits([])
@@ -41,47 +42,47 @@ export function CommitFeed() {
   const getTimeAgo = (timestamp: string) => {
     const seconds = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000)
 
-    if (seconds < 60) return `${seconds} seconds ago`
+    if (seconds < 60) return `${seconds}s`
     const minutes = Math.floor(seconds / 60)
-    if (minutes < 60) return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`
+    if (minutes < 60) return `${minutes}m`
     const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ago`
+    if (hours < 24) return `${hours}h`
     const days = Math.floor(hours / 24)
-    return `${days} day${days !== 1 ? 's' : ''} ago`
+    return `${days}d`
   }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-6 w-6 animate-spin" />
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="h-4 w-4 animate-spin" />
       </div>
     )
   }
 
   if (commits.length === 0) {
     return (
-      <div className="flex items-center justify-center p-8 text-sm text-muted-foreground">
+      <div className="flex items-center justify-center p-4 text-xs text-muted-foreground">
         No commits yet
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {commits.map((commit) => (
-        <div key={commit.id} className="flex items-start gap-4 rounded-lg border p-4">
-          <Avatar className="h-10 w-10">
+        <div key={commit.id} className="flex items-center gap-2 rounded-lg border px-2 py-1.5">
+          <Avatar className="h-6 w-6">
             <AvatarImage src={commit.avatarUrl} alt={commit.author} />
-            <AvatarFallback>
+            <AvatarFallback className="text-xs">
               {commit.author.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1 space-y-1">
-            <p className="font-medium leading-none">{commit.message}</p>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{commit.author}</span>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium truncate">{commit.message}</p>
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <span className="truncate">{commit.author}</span>
               <span>•</span>
-              <span className="font-medium text-foreground">{commit.repo}</span>
+              <span className="font-medium text-foreground truncate">{commit.repo.split("/")[1]}</span>
               <span>•</span>
               <span>{getTimeAgo(commit.time)}</span>
             </div>
