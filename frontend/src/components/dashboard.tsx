@@ -163,20 +163,23 @@ export default function Dashboard() {
           <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
             transition={{ type: "spring", stiffness: 300 }}
+            className="my-auto"
           >
-            <Card className="retro-panel border-primary/20 backdrop-blur-md bg-background/90 shadow-xl hover:shadow-2xl hover:border-primary/30 transition-all">
-              <CardHeader className="text-center p-8">
+            <Card className="retro-panel border-primary/20 backdrop-blur-md bg-background/90 shadow-xl hover:shadow-2xl hover:border-primary/30 transition-all overflow-hidden">
+              <CardHeader className="text-center p-8 pb-4">
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.6, type: "spring" }}
                 >
-                  <CardTitle className="retro-glow text-4xl tracking-widest mb-3 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/70">COMMIT ENERGY</CardTitle>
-                  <CardDescription className="text-primary/70 text-lg font-medium">System Performance Monitor</CardDescription>
+                  <CardTitle className="retro-glow text-5xl tracking-widest mb-3 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/70 font-bold">COMMIT ENERGY</CardTitle>
+                  <CardDescription className="text-primary/70 text-xl font-medium">Hacker Performance Monitor</CardDescription>
                 </motion.div>
               </CardHeader>
-              <CardContent className="p-8">
-                <EnergyBar />
+              <CardContent className="p-8 pt-2">
+                <div className="relative">
+                  <EnergyBar />
+                </div>
               </CardContent>
             </Card>
           </motion.div>
