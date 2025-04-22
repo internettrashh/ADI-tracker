@@ -69,7 +69,7 @@ export function GitHubAuthFlow({ onComplete }: { onComplete?: () => void }) {
   };
 
   const handleGitHubAuth = () => {
-    window.location.href = 'https://vmi1968527.contaboserver.net/auth/github';
+    window.open('https://github.com/apps/aditracker/installations/new/permissions?target_id=70342528&target_type=User', '_blank');
   };
 
   const handleInstallApp = () => {
