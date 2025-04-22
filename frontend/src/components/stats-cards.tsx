@@ -69,7 +69,7 @@ export function StatsCards() {
     )
   }
 
-  const AnimatedNumber = ({ value, prevValue, icon: Icon }: { value: number, prevValue: number | null, icon: any }) => {
+  const AnimatedNumber = ({ value, prevValue, icon: Icon, label }: { value: number, prevValue: number | null, icon: any, label: string }) => {
     const isNew = prevValue !== null && value !== prevValue
     const isIncrease = prevValue !== null && value > prevValue
 
@@ -80,18 +80,22 @@ export function StatsCards() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 20, opacity: 0 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        className="relative"
+        className="relative flex items-center justify-between group"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <motion.div
             initial={isNew ? { scale: 0 } : false}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            className="p-2 rounded-md bg-primary/10 group-hover:bg-primary/15 transition-colors"
           >
             <Icon className="h-4 w-4 text-primary" />
           </motion.div>
-          <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
-            {value}
+          <div>
+            <div className="text-xs uppercase text-primary/70 group-hover:text-primary/80 transition-colors">{label}</div>
+            <div className="font-mono text-xl font-bold tracking-wider text-primary retro-glow">
+              {value.toLocaleString()}
+            </div>
           </div>
         </div>
         {isNew && isIncrease && (
@@ -99,7 +103,7 @@ export function StatsCards() {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="absolute -right-2 -top-2 text-xs font-bold text-green-500"
+            className="absolute -right-1 -top-1 text-xs font-bold text-green-500"
           >
             ↑
           </motion.div>
@@ -109,54 +113,48 @@ export function StatsCards() {
   }
 
   return (
-    <div className="grid gap-4 text-sm">
+    <div className="grid gap-6">
       <motion.div
-        className="flex items-center justify-between border-b border-primary/20 pb-3"
+        className="group"
         whileHover={{ scale: 1.02 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-xs uppercase text-primary/70">Active Hackers</span>
-        </div>
         <AnimatePresence mode="wait">
           <AnimatedNumber
             value={stats?.totalHackers || 0}
             prevValue={prevStats?.totalHackers}
             icon={Users}
+            label="Active Hackers"
           />
         </AnimatePresence>
       </motion.div>
 
       <motion.div
-        className="flex items-center justify-between border-b border-primary/20 pb-3"
+        className="group"
         whileHover={{ scale: 1.02 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-xs uppercase text-primary/70">Total Commits</span>
-        </div>
         <AnimatePresence mode="wait">
           <AnimatedNumber
             value={stats?.totalCommits || 0}
             prevValue={prevStats?.totalCommits}
             icon={GitCommit}
+            label="Total Commits"
           />
         </AnimatePresence>
       </motion.div>
 
       <motion.div
-        className="flex items-center justify-between"
+        className="group"
         whileHover={{ scale: 1.02 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-xs uppercase text-primary/70">Active Projects</span>
-        </div>
         <AnimatePresence mode="wait">
           <AnimatedNumber
             value={stats?.totalProjects || 0}
             prevValue={prevStats?.totalProjects}
             icon={GitFork}
+            label="Active Projects"
           />
         </AnimatePresence>
       </motion.div>

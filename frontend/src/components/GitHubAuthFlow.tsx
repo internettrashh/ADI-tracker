@@ -78,32 +78,38 @@ export function GitHubAuthFlow({ onComplete }: { onComplete?: () => void }) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 rounded-tr-lg">
-        <Loader2 className="h-4 w-4 animate-spin" />
-        <span>Checking authentication...</span>
-      </div>
+      <Button variant="outline" size="lg" disabled className="gap-2 bg-background/80 backdrop-blur-sm border-primary/50">
+        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+        <span className="text-primary/90">Checking authentication...</span>
+      </Button>
     );
   }
 
   if (!authStatus?.authenticated) {
     return (
-      <Button onClick={handleGitHubAuth} className="gap-2 rounded-tr-lg">
-        <Github className="h-4 w-4" />
-        Connect with GitHub
+      <Button
+        onClick={handleGitHubAuth}
+        size="lg"
+        variant="outline"
+        className="gap-3 bg-background/80 backdrop-blur-sm border-primary hover:bg-background/90 hover:border-primary/80 transition-all"
+      >
+        <Github className="h-5 w-5 text-primary" />
+        <span className="text-primary font-medium">Connect with GitHub</span>
       </Button>
     );
   }
 
   if (!authStatus.hasGitHubApp) {
     return (
-
-
-
-      <Button onClick={handleInstallApp} className="gap-2 rounded-tr-lg">
-        <Github className="h-4 w-4" />
-        Install GitHub App
+      <Button
+        onClick={handleInstallApp}
+        size="lg"
+        variant="outline"
+        className="gap-3 bg-background/80 backdrop-blur-sm border-primary hover:bg-background/90 hover:border-primary/80 transition-all"
+      >
+        <Github className="h-5 w-5 text-primary" />
+        <span className="text-primary font-medium">Install GitHub App</span>
       </Button>
-
     );
   }
 

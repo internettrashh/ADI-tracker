@@ -25,7 +25,7 @@ export function CommitFeed() {
         const data = await response.json()
         // Show more commits since we have a more compact layout
         setPrevCommits(commits)
-        setCommits(data.slice(0, 8))
+        setCommits(data)
       } catch (error) {
         console.error('Error fetching commits:', error)
         setCommits([])
@@ -86,7 +86,7 @@ export function CommitFeed() {
                 damping: 30,
                 delay: isNew ? index * 0.1 : 0
               }}
-              className="flex items-center gap-2 rounded-lg border px-2 py-1.5"
+              className="flex items-center gap-2 rounded-lg border px-2 py-1.5 mt-4"
             >
               <motion.div
                 initial={isNew ? { scale: 0 } : false}
