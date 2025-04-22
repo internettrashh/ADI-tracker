@@ -21,14 +21,18 @@ export default function Dashboard() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="grid-bg flex min-h-screen w-full flex-col bg-background p-6"
+      className="grid-bg flex min-h-screen w-full flex-col bg-background p-6 relative overflow-hidden"
     >
-      {/* GitHub Connection Button - Top Right */}
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb),0.1),transparent)] pointer-events-none" />
+
+      {/* GitHub Connection Button - Fixed Top Right */}
       <motion.div
         initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="absolute right-6"
+        className="fixed right-6 top-6 z-50"
       >
         <AnimatePresence mode="wait">
           {!isConnected ? (
@@ -37,7 +41,9 @@ export default function Dashboard() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
+              className="relative"
             >
+              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-lg -z-10" />
               <GitHubConnectButton onConnect={handleConnect} />
             </motion.div>
           ) : (
@@ -46,8 +52,10 @@ export default function Dashboard() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
+              className="relative"
             >
-              <Button variant="outline" size="sm" className="gap-2 border-primary/50">
+              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-lg -z-10" />
+              <Button variant="outline" size="sm" className="gap-2 border-primary/50 backdrop-blur-sm bg-background/80">
                 <Github className="h-4 w-4" />
                 Synced
               </Button>
@@ -57,7 +65,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Main Content Grid */}
-      <div className="flex flex-1 items-stretch">
+      <div className="flex flex-1 items-stretch gap-6">
         {/* Left Side - Stats and Activity */}
         <motion.div
           initial={{ x: -50, opacity: 0 }}
@@ -66,10 +74,10 @@ export default function Dashboard() {
           className="flex w-72 flex-col gap-6"
         >
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <Card className="retro-panel border-primary/30">
+            <Card className="retro-panel border-primary/30 backdrop-blur-sm bg-background/80 shadow-lg">
               <CardHeader className="p-4">
                 <CardTitle className="retro-glow text-sm tracking-wider">SYSTEM STATS</CardTitle>
               </CardHeader>
@@ -81,11 +89,11 @@ export default function Dashboard() {
 
           {/* Recent Activity - Full height */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="flex-1"
           >
-            <Card className="retro-panel border-primary/30 flex flex-1 flex-col">
+            <Card className="retro-panel border-primary/30 flex flex-1 flex-col backdrop-blur-sm bg-background/80 shadow-lg">
               <CardHeader className="p-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="retro-glow text-sm tracking-wider">RECENT ACTIVITY</CardTitle>
@@ -110,15 +118,21 @@ export default function Dashboard() {
           className="mx-auto w-full max-w-3xl px-6 my-auto"
         >
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <Card className="retro-panel border-primary/30">
-              <CardHeader className="text-center p-4">
-                <CardTitle className="retro-glow text-2xl tracking-widest">COMMIT ENERGY</CardTitle>
-                <CardDescription className="text-primary/70">System Performance Monitor</CardDescription>
+            <Card className="retro-panel border-primary/30 backdrop-blur-sm bg-background/80 shadow-xl">
+              <CardHeader className="text-center p-6">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.6, type: "spring" }}
+                >
+                  <CardTitle className="retro-glow text-3xl tracking-widest mb-2">COMMIT ENERGY</CardTitle>
+                  <CardDescription className="text-primary/70 text-lg">System Performance Monitor</CardDescription>
+                </motion.div>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-8">
                 <EnergyBar />
               </CardContent>
             </Card>
@@ -133,11 +147,11 @@ export default function Dashboard() {
           className="w-96"
         >
           <motion.div
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="h-full"
           >
-            <Card className="retro-panel border-primary/30 h-full flex flex-col">
+            <Card className="retro-panel border-primary/30 h-full flex flex-col backdrop-blur-sm bg-background/80 shadow-lg">
               <CardHeader className="p-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="retro-glow text-sm tracking-wider">TOP HACKERS</CardTitle>
