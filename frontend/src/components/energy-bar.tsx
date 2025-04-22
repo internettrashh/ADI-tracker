@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
 
 interface CommitStats {
@@ -11,6 +11,14 @@ interface CommitStats {
 export function EnergyBar() {
   const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 300 })
   const [isLoading, setIsLoading] = useState(true)
+  const prevCommitsRef = useRef(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    // Create audio element
+    audioRef.current = new Audio('/commit-sound.wav')
+    audioRef.current.volume = 0.5 // Set volume to 50%
+  }, [])
 
   useEffect(() => {
     const fetchCommitStats = async () => {
@@ -20,6 +28,14 @@ export function EnergyBar() {
           throw new Error('Failed to fetch stats')
         }
         const data = await response.json()
+
+        // Play sound if commits increased
+        if (data.totalCommits > prevCommitsRef.current && prevCommitsRef.current !== 0) {
+          audioRef.current?.play().catch(console.error)
+        }
+
+        prevCommitsRef.current = data.totalCommits
+
         setStats({
           totalCommits: data.totalCommits || 0,
           goal: 300
