@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { GitCommit, GitFork, GitBranch, Users } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface StatsData {
   totalCommits: number
@@ -10,6 +11,7 @@ interface StatsData {
 
 export function StatsCards() {
   const [stats, setStats] = useState<StatsData | null>(null)
+  const [prevStats, setPrevStats] = useState<StatsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -25,6 +27,7 @@ export function StatsCards() {
         const data = await response.json()
         console.log('Fetched stats:', data) // Debug log
 
+        setPrevStats(stats)
         setStats({
           totalCommits: data.totalCommits,
           totalProjects: data.totalProjects,
@@ -67,6 +70,23 @@ export function StatsCards() {
     )
   }
 
+  const AnimatedNumber = ({ value, prevValue }: { value: number, prevValue: number | null }) => {
+    const isNew = prevValue !== null && value !== prevValue
+
+    return (
+      <motion.div
+        key={value}
+        initial={isNew ? { y: -20, opacity: 0 } : false}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 20, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        className="font-mono text-lg font-bold tracking-wider text-primary retro-glow"
+      >
+        {value}
+      </motion.div>
+    )
+  }
+
   return (
     <div className="grid gap-4 text-sm">
       <div className="flex items-center justify-between border-b border-primary/20 pb-3">
@@ -74,9 +94,12 @@ export function StatsCards() {
           <Users className="h-4 w-4 text-primary" />
           <span className="text-xs uppercase text-primary/70">Active Hackers</span>
         </div>
-        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
-          {stats?.totalHackers}
-        </div>
+        <AnimatePresence mode="wait">
+          <AnimatedNumber
+            value={stats?.totalHackers || 0}
+            prevValue={prevStats?.totalHackers}
+          />
+        </AnimatePresence>
       </div>
 
       <div className="flex items-center justify-between border-b border-primary/20 pb-3">
@@ -84,9 +107,12 @@ export function StatsCards() {
           <GitCommit className="h-4 w-4 text-primary" />
           <span className="text-xs uppercase text-primary/70">Total Commits</span>
         </div>
-        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
-          {stats?.totalCommits}
-        </div>
+        <AnimatePresence mode="wait">
+          <AnimatedNumber
+            value={stats?.totalCommits || 0}
+            prevValue={prevStats?.totalCommits}
+          />
+        </AnimatePresence>
       </div>
 
       <div className="flex items-center justify-between">
@@ -94,9 +120,12 @@ export function StatsCards() {
           <GitFork className="h-4 w-4 text-primary" />
           <span className="text-xs uppercase text-primary/70">Active Projects</span>
         </div>
-        <div className="font-mono text-lg font-bold tracking-wider text-primary retro-glow">
-          {stats?.totalProjects}
-        </div>
+        <AnimatePresence mode="wait">
+          <AnimatedNumber
+            value={stats?.totalProjects || 0}
+            prevValue={prevStats?.totalProjects}
+          />
+        </AnimatePresence>
       </div>
     </div>
   )

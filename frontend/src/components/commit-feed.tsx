@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Loader2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface Commit {
   id: string
@@ -14,15 +15,16 @@ interface Commit {
 export function CommitFeed() {
   const [commits, setCommits] = useState<Commit[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [prevCommits, setPrevCommits] = useState<Commit[]>([])
 
   useEffect(() => {
     const fetchCommits = async () => {
       try {
         const response = await fetch('https://vmi1968527.contaboserver.net/api/recent-commits', {
-
         })
         const data = await response.json()
         // Show more commits since we have a more compact layout
+        setPrevCommits(commits)
         setCommits(data.slice(0, 8))
       } catch (error) {
         console.error('Error fetching commits:', error)
@@ -69,26 +71,61 @@ export function CommitFeed() {
 
   return (
     <div className="space-y-2">
-      {commits.map((commit) => (
-        <div key={commit.id} className="flex items-center gap-2 rounded-lg border px-2 py-1.5">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src={commit.avatarUrl} alt={commit.author} />
-            <AvatarFallback className="text-xs">
-              {commit.author.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="font-medium truncate">{commit.message}</p>
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <span className="truncate">{commit.author}</span>
-              <span>•</span>
-              <span className="font-medium text-foreground truncate">{commit.repo.split("/")[1]}</span>
-              <span>•</span>
-              <span>{getTimeAgo(commit.time)}</span>
-            </div>
-          </div>
-        </div>
-      ))}
+      <AnimatePresence mode="popLayout">
+        {commits.map((commit, index) => {
+          const isNew = !prevCommits.some(prev => prev.id === commit.id)
+          return (
+            <motion.div
+              key={commit.id}
+              initial={isNew ? { opacity: 0, y: 20 } : false}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 30,
+                delay: isNew ? index * 0.1 : 0
+              }}
+              className="flex items-center gap-2 rounded-lg border px-2 py-1.5"
+            >
+              <motion.div
+                initial={isNew ? { scale: 0 } : false}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              >
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={commit.avatarUrl} alt={commit.author} />
+                  <AvatarFallback className="text-xs">
+                    {commit.author.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </motion.div>
+              <div className="flex-1 min-w-0">
+                <motion.p
+                  className="font-medium truncate"
+                  initial={isNew ? { x: -20, opacity: 0 } : false}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: isNew ? 0.2 : 0 }}
+                >
+                  {commit.message}
+                </motion.p>
+                <motion.div
+                  className="flex items-center gap-1 text-sm text-muted-foreground"
+                  initial={isNew ? { x: -20, opacity: 0 } : false}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: isNew ? 0.3 : 0 }}
+                >
+                  <span className="truncate">{commit.author}</span>
+                  <span>•</span>
+                  <span className="font-medium text-foreground truncate">{commit.repo.split("/")[1]}</span>
+                  <span>•</span>
+                  <span>{getTimeAgo(commit.time)}</span>
+                </motion.div>
+              </div>
+            </motion.div>
+          )
+        })}
+      </AnimatePresence>
     </div>
   )
 }
