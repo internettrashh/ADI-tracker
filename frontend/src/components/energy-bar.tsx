@@ -12,12 +12,20 @@ export function EnergyBar() {
   const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 300 })
   const [isLoading, setIsLoading] = useState(true)
   const prevCommitsRef = useRef(0)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const prevPercentageRef = useRef(0)
+  const audioRefs = useRef({
+    commit: new Audio('/commit-sound.wav'),
+    milestone25: new Audio('/milestone-25.wav'),
+    milestone50: new Audio('/milestone-50.wav'),
+    milestone75: new Audio('/milestone-75.wav'),
+    milestone100: new Audio('/milestone-100.wav')
+  })
 
   useEffect(() => {
-    // Create audio element
-    audioRef.current = new Audio('/commit-sound.wav')
-    audioRef.current.volume = 0.5 // Set volume to 50%
+    // Set volume for all sounds
+    Object.values(audioRefs.current).forEach(audio => {
+      audio.volume = 0.5
+    })
   }, [])
 
   useEffect(() => {
@@ -29,17 +37,34 @@ export function EnergyBar() {
         }
         const data = await response.json()
 
-        // Play sound if commits increased
-        if (data.totalCommits > prevCommitsRef.current && prevCommitsRef.current !== 0) {
-          audioRef.current?.play().catch(console.error)
+        const newStats = {
+          totalCommits: data.totalCommits || 0,
+          goal: 300
+        }
+
+        // Calculate percentages
+        const currentPercentage = Math.min(100, (newStats.totalCommits / newStats.goal) * 100)
+        const prevPercentage = prevPercentageRef.current
+
+        // Check for milestone crossings
+        if (prevPercentage < 25 && currentPercentage >= 25) {
+          audioRefs.current.milestone25.play().catch(console.error)
+        } else if (prevPercentage < 50 && currentPercentage >= 50) {
+          audioRefs.current.milestone50.play().catch(console.error)
+        } else if (prevPercentage < 75 && currentPercentage >= 75) {
+          audioRefs.current.milestone75.play().catch(console.error)
+        } else if (prevPercentage < 100 && currentPercentage >= 100) {
+          audioRefs.current.milestone100.play().catch(console.error)
+        }
+        // Play regular commit sound if commits increased but not at a milestone
+        else if (data.totalCommits > prevCommitsRef.current && prevCommitsRef.current !== 0) {
+          audioRefs.current.commit.play().catch(console.error)
         }
 
         prevCommitsRef.current = data.totalCommits
+        prevPercentageRef.current = currentPercentage
 
-        setStats({
-          totalCommits: data.totalCommits || 0,
-          goal: 300
-        })
+        setStats(newStats)
       } catch (error) {
         console.error('Error fetching commit stats:', error)
       } finally {
@@ -48,7 +73,6 @@ export function EnergyBar() {
     }
 
     fetchCommitStats()
-    // Update every 5 seconds
     const interval = setInterval(fetchCommitStats, 5000)
     return () => clearInterval(interval)
   }, [])
