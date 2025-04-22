@@ -15,7 +15,7 @@ export function LeaderBoard() {
     const fetchLeaderboard = async () => {
       try {
         const response = await fetch('https://vmi1968527.contaboserver.net/api/leaderboard', {
-          credentials: 'include'
+         
         })
         const data = await response.json()
         setLeaders(data.slice(0, 7)) // Only take top 7
