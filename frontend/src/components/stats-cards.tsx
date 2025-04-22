@@ -94,15 +94,14 @@ export function StatsCards() {
             {value}
           </div>
         </div>
-        {isNew && (
+        {isNew && isIncrease && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className={`absolute -right-2 -top-2 text-xs font-bold ${isIncrease ? 'text-green-500' : 'text-red-500'
-              }`}
+            className="absolute -right-2 -top-2 text-xs font-bold text-green-500"
           >
-            {isIncrease ? '↑' : '↓'}
+            ↑
           </motion.div>
         )}
       </motion.div>
