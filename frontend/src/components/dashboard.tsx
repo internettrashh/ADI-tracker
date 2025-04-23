@@ -100,6 +100,20 @@ export default function Dashboard() {
       {/* Matrix Background */}
       <MatrixBackground />
 
+      {/* Logo */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="absolute top-8 z-20  left-1/2 !translate-x-[-66%]"
+      >
+        <img
+          src="/ai.png"
+          alt="Arweave India"
+          className="h-12 w-auto opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+        />
+      </motion.div>
+
       {/* Main Content Grid */}
       <div className="flex flex-1 items-stretch gap-8 relative z-10">
         {/* Left Side - Stats and Activity */}
@@ -172,7 +186,7 @@ export default function Dashboard() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.6, type: "spring" }}
                 >
-                  <CardTitle className="retro-glow text-5xl tracking-widest mb-3 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/70 font-bold">COMMIT ENERGY</CardTitle>
+                  <CardTitle className="retro-glow text-5xl tracking-widest mb-3 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/70 font-bold">HACKERHOUSE ENERGY</CardTitle>
                   <CardDescription className="text-primary/70 text-xl font-medium">Hacker Performance Monitor</CardDescription>
                 </motion.div>
               </CardHeader>
