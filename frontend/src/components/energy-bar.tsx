@@ -9,7 +9,7 @@ interface CommitStats {
 }
 
 export function EnergyBar() {
-  const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 300 })
+  const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 600 })
   const [isLoading, setIsLoading] = useState(true)
   const prevCommitsRef = useRef(0)
   const prevPercentageRef = useRef(0)
@@ -39,7 +39,7 @@ export function EnergyBar() {
 
         const newStats = {
           totalCommits: data.totalCommits || 0,
-          goal: 300
+          goal: 600
         }
 
         // Calculate percentages
