@@ -9,7 +9,7 @@ interface CommitStats {
 }
 
 export function EnergyBar() {
-  const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 300 })
+  const [stats, setStats] = useState<CommitStats>({ totalCommits: 0, goal: 600 })
   const [isLoading, setIsLoading] = useState(true)
   const prevCommitsRef = useRef(0)
   const prevPercentageRef = useRef(0)
@@ -39,7 +39,7 @@ export function EnergyBar() {
 
         const newStats = {
           totalCommits: data.totalCommits || 0,
-          goal: 300
+          goal: 600
         }
 
         // Calculate percentages
@@ -153,11 +153,11 @@ export function EnergyBar() {
           initial={{ height: 0 }}
           animate={{ height: `${percentageOfGoal}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 bg-gradient-to-t from-primary/50 to-primary/20 backdrop-blur-sm rounded-t-lg"
+          className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-green-500/50 to-green-400/20 backdrop-blur-sm rounded-t-lg"
           style={{ zIndex: 10 }}
         >
           {/* Glow Effect */}
-          <div className="absolute -inset-[2px] bg-primary/20 blur-lg rounded-t-lg" />
+          <div className="absolute -inset-[2px] bg-green-500/20 blur-lg rounded-t-lg" />
 
           {/* Commit Count */}
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-center w-full">
@@ -170,7 +170,7 @@ export function EnergyBar() {
           </div>
 
           {/* Bar Highlight */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 via-green-400/5 to-green-500/10" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0)_0%,rgba(255,255,255,0.1)_50%,rgba(0,0,0,0)_100%)]" />
         </motion.div>
 
